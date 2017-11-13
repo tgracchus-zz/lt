@@ -6,7 +6,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
-import org.let.tweets.Tweets.{UserNotFound, UserTweets, UserTweetsQuery}
+import org.let.twitter.Tweets.{UserNotFound, UserTweets, UserTweetsQuery}
 
 import scala.concurrent.duration._
 

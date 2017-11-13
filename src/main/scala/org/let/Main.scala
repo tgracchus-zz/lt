@@ -5,7 +5,7 @@ import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import org.let.http.LetShoutRoute
-import org.let.tweets.Tweets
+import org.let.twitter.Tweets
 
 object Main extends App with Config {
   implicit val actorSystem = ActorSystem("letShout")

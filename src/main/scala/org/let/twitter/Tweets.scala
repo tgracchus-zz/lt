@@ -1,4 +1,4 @@
-package org.let.tweets
+package org.let.twitter
 
 
 import akka.actor.{Actor, ActorLogging, Props}
