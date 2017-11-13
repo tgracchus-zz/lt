@@ -1,26 +1,29 @@
 package org.let.twitter.twitter4j;
 
-import org.let.twitter.BaseTwitterClient;
-import org.let.twitter.TwitterClient;
+import org.let.twitter.Tweets;
 import org.let.twitter.TwitterSearchException;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Twitter4JClient extends BaseTwitterClient {
+public class Twitter4JClient implements TwitterClient {
 
     private final Twitter twitter;
+    private final Twitter4JPaginator twitter4JPaginator;
+    private final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-    public Twitter4JClient(Twitter twitter) {
+    protected Twitter4JClient(Twitter twitter, Twitter4JPaginator twitter4JPaginator) {
         this.twitter = twitter;
+        this.twitter4JPaginator = twitter4JPaginator;
     }
 
-    public List<Status> searchUserTweets(String user, int tweetCount) throws TwitterSearchException {
-        List<Status> statusList = new ArrayList<>();
+    public List<Tweets.Tweet> searchUserTweets(String user, int tweetCount) throws TwitterSearchException {
+        List<Tweets.Tweet> statusList = new ArrayList<>();
         Query query = new Query("from:" + user);
-        query.setCount(calculatePageSize(100, tweetCount));
+        query.setCount(twitter4JPaginator.calculatePageSize(100, tweetCount));
         QueryResult queryResult;
         do {
 
@@ -29,12 +32,15 @@ public class Twitter4JClient extends BaseTwitterClient {
             } catch (TwitterException e) {
                 throw new TwitterSearchException(e);
             }
-            statusList.addAll(queryResult.getTweets());
+
+            for (Status tweet : queryResult.getTweets()) {
+                statusList.add(new Tweets.Tweet(tweet.getText(), df.format(tweet.getCreatedAt())));
+            }
             query = queryResult.nextQuery();
 
         } while (statusList.size() < tweetCount);
 
-        List<Status> trimStatusList = new ArrayList<>();
+        List<Tweets.Tweet> trimStatusList = new ArrayList<>();
         for (int i = 0, j = 0; i < tweetCount && j < statusList.size(); i++, j++) {
             trimStatusList.add(statusList.get(i));
         }
@@ -53,7 +59,7 @@ public class Twitter4JClient extends BaseTwitterClient {
                 .setOAuthAccessTokenSecret(oAuthAccessTokenSecret);
         twitter4j.TwitterFactory tf = new twitter4j.TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
-        return new Twitter4JClient(twitter);
+        return new Twitter4JClient(twitter, new Twitter4JPaginator());
     }
 
 }

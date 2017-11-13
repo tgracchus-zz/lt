@@ -5,7 +5,7 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.pattern.ask
 import akka.util.Timeout
-import org.let.twitter.Tweets.{UserNotFound, UserTweets, UserTweetsQuery}
+import org.let.twitter.Tweets.{TwitterError, UserTweets, UserTweetsQuery}
 
 import scala.concurrent.duration._
 
@@ -28,8 +28,8 @@ class LetShoutRoute(val tweetHandler: ActorRef) extends Directives with LetShout
               onSuccess(tweetHandler ? userTweetsQuery) {
                 case userTweets: UserTweets =>
                   complete(StatusCodes.OK, userTweets)
-                case userNotFound: UserNotFound =>
-                  complete(StatusCodes.BadRequest, userNotFound)
+                case error: TwitterError =>
+                  complete(StatusCodes.InternalServerError, error)
                 case _ =>
                   complete(StatusCodes.InternalServerError)
               }

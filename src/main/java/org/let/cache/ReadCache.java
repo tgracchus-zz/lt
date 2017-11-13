@@ -1,5 +1,5 @@
 package org.let.cache;
 
-public interface ReadThroughCache<K,V> {
+public interface ReadCache<K,V> {
     V getOrLoad(K key);
 }
