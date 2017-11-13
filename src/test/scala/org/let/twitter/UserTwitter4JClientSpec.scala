@@ -1,9 +1,10 @@
 package org.let.twitter
 
 import org.let.Config
+import org.let.twitter.twitter4j.TwitterClientFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-class UserTweetSearchSpec extends FlatSpec with Matchers with Config {
+class UserTwitter4JClientSpec extends FlatSpec with Matchers with Config {
 
   "TweetFetcher" should "retrieve my tweets" in {
 

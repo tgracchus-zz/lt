@@ -1,17 +1,13 @@
 package org.let.twitter
 
 
-import java.text.SimpleDateFormat
-import java.util.Date
-
 import akka.actor.{Actor, ActorLogging, Props}
-import twitter4j.Twitter
+import org.let.cache.TweetCache
 
-import scala.collection.JavaConverters._
 
 object Tweets {
-  def props(twitter: Twitter): Props = {
-    Props(classOf[Tweets], twitter).withDispatcher("blocking-dispatcher")
+  def props(cache: TweetCache): Props = {
+    Props(classOf[Tweets], cache).withDispatcher("blocking-dispatcher")
   }
 
   case class UserTweetsQuery(user: String, tweets: Int)
@@ -25,23 +21,17 @@ object Tweets {
 }
 
 
-class Tweets(val twitter: Twitter) extends Actor with ActorLogging {
+class Tweets(val cache: TweetCache) extends Actor with ActorLogging {
 
   import Tweets._
 
   implicit val ec = context.dispatcher
 
-  private val df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
 
   def receive: Receive = {
-    case UserTweetsQuery(twitterUser, count) => {
-      val tweets = TweetSearch.userTweetSearch(twitter, twitterUser, count)
-        .asScala.toList.map(tweet => {
-        new Tweet(tweet = tweet.getText, createdAt = df.format(tweet.getCreatedAt))
-      })
-      sender() ! UserTweets(twitterUser, tweets)
+    case userTweetsQuery: UserTweetsQuery => {
+      sender() ! cache.getOrLoad(userTweetsQuery)
     }
-
   }
 
 
