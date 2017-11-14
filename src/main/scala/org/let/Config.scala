@@ -11,7 +11,7 @@ trait Config {
 
   protected case class HttpConfig(interface: String, port: Int)
 
-  protected case class TwitterConfig(debug: Boolean, oAuthConsumerKey: String, oAuthConsumerSecret: String, oAuthAccessToken: String, oAuthAccessTokenSecret: String)
+  protected case class TwitterConfig(oAuthConsumerKey: String, oAuthConsumerSecret: String, oAuthAccessToken: String, oAuthAccessTokenSecret: String)
 
   private val config = ConfigFactory.load()
   protected val httpConfig: HttpConfig = config.as[HttpConfig]("http")

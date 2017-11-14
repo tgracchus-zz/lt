@@ -3,6 +3,42 @@ version '1.0.0'
 
 apply plugin: 'java'
 apply plugin: 'scala'
+apply plugin: 'application'
+
+
+mainClassName = " org.let.Main"
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala', 'src/main/java']
+        }
+        java {
+            srcDirs = []
+        }
+    }
+}
+
+startScripts {
+    defaultJvmOpts = applicationDefaultJvmArgs + ["-DTWITTER_OAUTH_CONSUMER_KEY=@TWITTER_OAUTH_CONSUMER_KEY",
+                                                  "-DTWITTER_OAUTH_CONSUMER_SECRET=@TWITTER_OAUTH_CONSUMER_SECRET",
+                                                  "-DTWITTER_OAUTH_ACCESS_TOKEN=@TWITTER_OAUTH_ACCESS_TOKEN",
+                                                  "-DTWITTER_OAUTH_ACCESS_TOKEN_SECRET=@TWITTER_OAUTH_ACCESS_TOKEN_SECRET"]
+    doLast {
+        unixScript.text = unixScript.text.replace('@TWITTER_OAUTH_CONSUMER_KEY', '$TWITTER_OAUTH_CONSUMER_KEY')
+        windowsScript.text = windowsScript.text.replace('@TWITTER_OAUTH_CONSUMER_KEY', '%TWITTER_OAUTH_CONSUMER_KEY%')
+
+        unixScript.text = unixScript.text.replace('@TWITTER_OAUTH_CONSUMER_SECRET', '$TWITTER_OAUTH_CONSUMER_SECRET')
+        windowsScript.text = windowsScript.text.replace('@TWITTER_OAUTH_CONSUMER_SECRET', '%TWITTER_OAUTH_CONSUMER_SECRET%')
+
+        unixScript.text = unixScript.text.replace('@TWITTER_OAUTH_ACCESS_TOKEN', '$TWITTER_OAUTH_ACCESS_TOKEN')
+        windowsScript.text = windowsScript.text.replace('@TWITTER_OAUTH_ACCESS_TOKEN', '%TWITTER_OAUTH_ACCESS_TOKEN%')
+
+        unixScript.text = unixScript.text.replace('@TWITTER_OAUTH_ACCESS_TOKEN_SECRET', '$TWITTER_OAUTH_ACCESS_TOKEN_SECRET')
+        windowsScript.text = windowsScript.text.replace('@TWITTER_OAUTH_ACCESS_TOKEN_SECRET', '%TWITTER_OAUTH_ACCESS_TOKEN_SECRET%')
+    }
+}
+
 
 buildscript {
     repositories {

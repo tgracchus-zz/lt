@@ -5,7 +5,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class UserTwitter4JClientSpec extends FlatSpec with Matchers with Config {
 
-  val twitterClient = Twitter4JClient.newTwitterClient(twitterConfig.debug,
+  val twitterClient = Twitter4JClient.newTwitterClient(
     twitterConfig.oAuthConsumerKey, twitterConfig.oAuthConsumerSecret,
     twitterConfig.oAuthAccessToken, twitterConfig.oAuthAccessTokenSecret)
 

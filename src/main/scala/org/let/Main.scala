@@ -6,8 +6,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.routing.{DefaultResizer, RoundRobinPool}
 import akka.stream.ActorMaterializer
-import org.let.cache.{ReadCache, TweetCacheLoader}
 import org.let.cache.caffeine.CaffeineReadCache
+import org.let.cache.{ReadCache, TweetCacheLoader}
 import org.let.http.LetShoutRoute
 import org.let.twitter.Tweets
 import org.let.twitter.Tweets.{UserTweets, UserTweetsQuery}
@@ -18,7 +18,7 @@ object Main extends App with Config {
   implicit val actorMaterializer = ActorMaterializer()
   implicit val executor = actorSystem.dispatcher
   implicit val log = Logging(actorSystem, "letShout")
-  implicit val twitter = Twitter4JClient.newTwitterClient(twitterConfig.debug,
+  implicit val twitter = Twitter4JClient.newTwitterClient(
     twitterConfig.oAuthConsumerKey, twitterConfig.oAuthConsumerSecret,
     twitterConfig.oAuthAccessToken, twitterConfig.oAuthAccessTokenSecret)
 

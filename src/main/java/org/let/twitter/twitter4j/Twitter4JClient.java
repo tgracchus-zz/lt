@@ -1,6 +1,5 @@
 package org.let.twitter.twitter4j;
 
-import org.let.twitter.Tweets;
 import org.let.twitter.TwitterSearchException;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -20,8 +19,8 @@ public class Twitter4JClient implements TwitterClient {
         this.twitter4JPaginator = twitter4JPaginator;
     }
 
-    public List<Tweets.Tweet> searchUserTweets(String user, int tweetCount) throws TwitterSearchException {
-        List<Tweets.Tweet> statusList = new ArrayList<>();
+    public List<JTweet> searchUserTweets(String user, int tweetCount) throws TwitterSearchException {
+        List<JTweet> statusList = new ArrayList<>();
         Query query = new Query("from:" + user);
         query.setCount(twitter4JPaginator.calculatePageSize(100, tweetCount));
         QueryResult queryResult;
@@ -34,13 +33,13 @@ public class Twitter4JClient implements TwitterClient {
             }
 
             for (Status tweet : queryResult.getTweets()) {
-                statusList.add(new Tweets.Tweet(tweet.getText(), df.format(tweet.getCreatedAt())));
+                statusList.add(new JTweet(tweet.getText(), df.format(tweet.getCreatedAt())));
             }
             query = queryResult.nextQuery();
 
         } while (statusList.size() < tweetCount);
 
-        List<Tweets.Tweet> trimStatusList = new ArrayList<>();
+        List<JTweet> trimStatusList = new ArrayList<>();
         for (int i = 0, j = 0; i < tweetCount && j < statusList.size(); i++, j++) {
             trimStatusList.add(statusList.get(i));
         }
@@ -49,10 +48,10 @@ public class Twitter4JClient implements TwitterClient {
     }
 
 
-    public static TwitterClient newTwitterClient(boolean debug, String oAuthConsumerKey, String oAuthConsumerSecret,
+    public static TwitterClient newTwitterClient(String oAuthConsumerKey, String oAuthConsumerSecret,
                                                  String oAuthAccessToken, String oAuthAccessTokenSecret) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(debug)
+        cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(oAuthConsumerKey)
                 .setOAuthConsumerSecret(oAuthConsumerSecret)
                 .setOAuthAccessToken(oAuthAccessToken)
