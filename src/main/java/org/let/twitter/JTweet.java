@@ -1,4 +1,4 @@
-package org.let.twitter.twitter4j;
+package org.let.twitter;
 
 public class JTweet {
     private final String tweet;

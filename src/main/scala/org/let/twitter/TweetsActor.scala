@@ -3,12 +3,11 @@ package org.let.twitter
 
 import akka.actor.{Actor, ActorLogging, Props}
 import org.let.cache.TweetCache
-import org.let.twitter.twitter4j.TwitterClient
 
 
 object TweetsActor {
-  def props(): Props = {
-    Props(classOf[TweetsActor]).withDispatcher("blocking-dispatcher")
+  def props(twitter: TwitterClient): Props = {
+    Props(classOf[TweetsActor], twitter).withDispatcher("blocking-dispatcher")
   }
 
   case class UserTweetsQuery(user: String, tweets: Int)
@@ -21,7 +20,7 @@ object TweetsActor {
 
 }
 
-class TweetsActor(implicit val twitter: TwitterClient) extends Actor with TweetCache with ActorLogging {
+class TweetsActor(val twitter: TwitterClient) extends Actor with TweetCache with ActorLogging {
 
   import TweetsActor._
 

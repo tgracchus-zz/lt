@@ -7,16 +7,16 @@ import akka.stream.ActorMaterializer
 import org.let.http.LetShoutRoute
 import org.let.twitter.twitter4j.Twitter4JClient
 
-object Main extends App with Config with LetShoutRoute {
-  implicit val actorSystem = ActorSystem("letShout")
+object Main extends App with Config {
+  implicit val system = ActorSystem("letShout")
   implicit val actorMaterializer = ActorMaterializer()
-  implicit val executor = actorSystem.dispatcher
-  implicit val log = Logging(actorSystem, "letShout")
+  implicit val executor = system.dispatcher
+  implicit val log = Logging(system, "letShout")
   implicit val twitter = Twitter4JClient.newTwitterClient(
     twitterConfig.oAuthConsumerKey, twitterConfig.oAuthConsumerSecret,
     twitterConfig.oAuthAccessToken, twitterConfig.oAuthAccessTokenSecret)
 
-  Http().bindAndHandle(route, httpConfig.interface, httpConfig.port)
+  Http().bindAndHandle(LetShoutRoute(system, twitter).route, httpConfig.interface, httpConfig.port)
   log.info("server started at 8080")
 
 }

@@ -20,7 +20,7 @@ class TweetsActorSpec() extends TestKit(ActorSystem("TweetsSpec", ConfigFactory.
 
     "return tweets" in {
       val tweetUser = UserTweetsQuery("user", 10)
-      val actorRef = TestActorRef(new TweetsActor())
+      val actorRef = TestActorRef(new TweetsActor(twitter))
       actorRef ! tweetUser
       val result = expectMsgType[UserTweets]
       assert(result.tweets.size == 10)
@@ -28,7 +28,7 @@ class TweetsActorSpec() extends TestKit(ActorSystem("TweetsSpec", ConfigFactory.
 
     "return error" in {
       val tweetUser = UserTweetsQuery("error", 10)
-      val actorRef = TestActorRef(new TweetsActor())
+      val actorRef = TestActorRef(new TweetsActor(twitter))
       actorRef ! tweetUser
       val result = expectMsgType[TwitterError]
     }

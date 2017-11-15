@@ -1,5 +1,7 @@
 package org.let.twitter.twitter4j;
 
+import org.let.twitter.JTweet;
+import org.let.twitter.TwitterClient;
 import org.let.twitter.TwitterSearchException;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -48,7 +50,7 @@ public class Twitter4JClient implements TwitterClient {
     }
 
 
-    public static TwitterClient newTwitterClient( Twitter twitter) {
+    public static TwitterClient newTwitterClient(Twitter twitter) {
         return new Twitter4JClient(twitter, new Twitter4JPaginator());
     }
 

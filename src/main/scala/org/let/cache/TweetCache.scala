@@ -2,8 +2,7 @@ package org.let.cache
 
 import org.let.cache.caffeine.CaffeineReadCache
 import org.let.twitter.TweetsActor.{UserTweets, UserTweetsQuery}
-import org.let.twitter.twitter4j.{Twitter4JClient, TwitterClient}
-import twitter4j.Twitter
+import org.let.twitter.TwitterClient
 
 trait TweetCache {
   val cacheLoader: TweetCacheLoader = new TweetCacheLoader()

@@ -1,6 +1,4 @@
-package org.let.twitter.twitter4j;
-
-import org.let.twitter.TwitterSearchException;
+package org.let.twitter;
 
 import java.util.List;
 

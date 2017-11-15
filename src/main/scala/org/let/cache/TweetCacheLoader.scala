@@ -2,7 +2,7 @@ package org.let.cache
 
 import com.github.benmanes.caffeine.cache.CacheLoader
 import org.let.twitter.TweetsActor.{Tweet, UserTweets, UserTweetsQuery}
-import org.let.twitter.twitter4j.TwitterClient
+import org.let.twitter.TwitterClient
 
 import scala.collection.JavaConverters._
 
