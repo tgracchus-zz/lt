@@ -5,7 +5,7 @@ import java.util.Date
 
 import org.let.cache.caffeine.CaffeineReadCache
 import org.let.cache.{ReadCache, TweetCacheLoader}
-import org.let.twitter.Tweets.{UserTweets, UserTweetsQuery}
+import org.let.twitter.TweetsActor.{UserTweets, UserTweetsQuery}
 import org.mockito.Matchers.anyObject
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
@@ -45,11 +45,6 @@ trait TwitterMock extends MockitoSugar {
     twitter
   }
 
-  implicit val twitter: TwitterClient = {
-    new Twitter4JClient(twitter4j, new Twitter4JPaginator)
-  }
-
-  val cacheLoader = new TweetCacheLoader()
-  implicit val readCache: ReadCache[UserTweetsQuery, UserTweets] = new CaffeineReadCache[UserTweetsQuery, UserTweets](cacheLoader)
+  implicit val twitter: TwitterClient = Twitter4JClient.newTwitterClient(twitter4j)
 
 }

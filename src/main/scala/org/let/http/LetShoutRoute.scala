@@ -1,31 +1,25 @@
 package org.let.http
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.pattern.ask
 import akka.util.Timeout
-import org.let.twitter.Tweets.{TwitterError, UserTweets, UserTweetsQuery}
+import org.let.twitter.TweetsActor.{TwitterError, UserTweets, UserTweetsQuery}
+import org.let.twitter.TweetsActorRouter
 
 import scala.concurrent.duration._
 
-object LetShoutRoute {
-  def apply(tweetHandler: ActorRef): Route = {
-    new LetShoutRoute(tweetHandler).routes
-  }
-}
-
-class LetShoutRoute(val tweetHandler: ActorRef) extends Directives with LetShoutJsonSupport {
-  private val apiVersion = "v1"
+trait LetShoutRoute extends Directives with LetShoutJsonSupport with TweetsActorRouter {
   implicit val timeout = Timeout(10 seconds)
+  private val apiVersion = "v1"
 
-  private val routes: Route =
+  val route: Route =
     pathPrefix(apiVersion) {
       path("letshout") {
         get {
           parameters(('user.as[String], 'tweets.as[Int] ? 50))
             .as(UserTweetsQuery) { userTweetsQuery =>
-              onSuccess(tweetHandler ? userTweetsQuery) {
+              onSuccess(tweetHandlerRouter ? userTweetsQuery) {
                 case userTweets: UserTweets =>
                   complete(StatusCodes.OK, userTweets)
                 case error: TwitterError =>

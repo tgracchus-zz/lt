@@ -1,11 +1,12 @@
 package org.let.cache.caffeine
 
-import org.let.twitter.Tweets.UserTweetsQuery
+import org.let.cache.TweetCache
+import org.let.twitter.TweetsActor.UserTweetsQuery
 import org.let.twitter.twitter4j.TwitterMock
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
 
-class TweetCacheLoaderSpec extends FlatSpec with Matchers with TwitterMock with BeforeAndAfterAll {
+class TweetCacheLoaderSpec extends FlatSpec with Matchers with TweetCache with TwitterMock with BeforeAndAfterAll {
 
   "TweetCacheLoader" should "get user 10 tweets" in {
     val userTweetsQuery = UserTweetsQuery("user", 10)

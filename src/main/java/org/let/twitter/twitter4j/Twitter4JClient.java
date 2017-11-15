@@ -48,6 +48,10 @@ public class Twitter4JClient implements TwitterClient {
     }
 
 
+    public static TwitterClient newTwitterClient( Twitter twitter) {
+        return new Twitter4JClient(twitter, new Twitter4JPaginator());
+    }
+
     public static TwitterClient newTwitterClient(String oAuthConsumerKey, String oAuthConsumerSecret,
                                                  String oAuthAccessToken, String oAuthAccessTokenSecret) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
